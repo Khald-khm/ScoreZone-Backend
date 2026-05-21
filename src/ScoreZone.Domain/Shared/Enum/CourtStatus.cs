@@ -1,0 +1,9 @@
+namespace ScoreZone.Domain.Shared.Enum
+{
+    public enum CourtStatus
+    {
+        Pending = 1,
+        Active = 2,
+        Rejected = 3
+    }
+}

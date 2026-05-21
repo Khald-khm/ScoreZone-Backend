@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ScoreZone.API/ScoreZone.API.csproj" />
+    <Project Path="src/ScoreZone.Application/ScoreZone.Application.csproj" />
+    <Project Path="src/ScoreZone.Domain/ScoreZone.Domain.csproj" />
+    <Project Path="src/ScoreZone.Infrastructure/ScoreZone.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ScoreZone.IntegrationTests/ScoreZone.IntegrationTests.csproj" />
+    <Project Path="tests/ScoreZone.UnitTests/ScoreZone.UnitTests.csproj" />
+  </Folder>
+</Solution>

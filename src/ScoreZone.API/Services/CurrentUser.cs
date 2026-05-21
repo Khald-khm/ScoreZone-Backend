@@ -1,0 +1,32 @@
+using System.Security.Claims;
+using ScoreZone.Application.Shared.Interfaces;
+
+namespace ScoreZone.API.Services
+{
+    public class CurrentUser : ICurrentUser
+    {
+        private readonly IHttpContextAccessor _userAccessor;
+
+        public CurrentUser(
+            IHttpContextAccessor userAccessor
+        )
+        {
+            _userAccessor = userAccessor;
+        }
+
+        public string? userId => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        public string? username => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+
+        public string? role => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+
+        // public string roles => _userAccessor.HttpContext.User.IsInRole(role);
+
+        // public bool IsInRole(string role)
+        // {
+        //     return _httpContextAccessor.HttpContext?
+        //         .User?
+        //         .IsInRole(role) ?? false;
+        // }
+    }
+}
