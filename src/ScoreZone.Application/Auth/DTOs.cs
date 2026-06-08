@@ -25,7 +25,7 @@ namespace ScoreZone.Application.Auth
         string password,
         string phone,
         string email,
-        string role
+        Roles role
     );
 
     public record RegisterResponseDTO(
