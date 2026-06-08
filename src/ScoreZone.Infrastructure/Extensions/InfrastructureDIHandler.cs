@@ -3,6 +3,10 @@ using ScoreZone.Infrastructure.Auth.JWT;
 using ScoreZone.Infrastructure.Options;
 using ScoreZone.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
+using ScoreZone.Infrastructure.Auth.Identity;
+using Microsoft.AspNetCore.Identity;
+using ScoreZone.Infrastructure.Data;
+using ScoreZone.Application.Auth;
 
 namespace ScoreZone.Infrastructure.Extensions
 {
@@ -14,6 +18,17 @@ namespace ScoreZone.Infrastructure.Extensions
 
             // This is required by CurrentUserAccessor to read the Token
             services.AddHttpContextAccessor();
+
+            
+
+            // ==========================
+            // Identity & Auth
+            // ==========================
+            services.AddIdentity<AppUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
+
+            services.AddScoped<IAuthService, AuthService>();
 
 
 

@@ -11,7 +11,7 @@ namespace ScoreZone.Application.Shared.Services
         private readonly IServiceProvider _serviceProvider;
 
 
-        public BaseApplicationService(IServiceProvider serviceProvider)
+        protected BaseApplicationService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

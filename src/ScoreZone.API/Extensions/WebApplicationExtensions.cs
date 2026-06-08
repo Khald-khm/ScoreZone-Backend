@@ -13,7 +13,7 @@ namespace ScoreZone.API.Extensions
             db.Database.Migrate();
         }
 
-        public static async void UseSeedDataAsync(this WebApplication app)
+        public static async Task UseSeedDataAsync(this WebApplication app)
         {
             
             await app.SeedAsync();

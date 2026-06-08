@@ -20,7 +20,7 @@ namespace ScoreZone.Infrastructure.Auth.Identity
         // Email => Already in IdneityUser
 
 
-        // private AppUser() {} // needed by Identity/EF Core
+        private AppUser() {} // needed by Identity/EF Core
 
         public AppUser(string firstName, string lastName, string username, string phoneNumber,
                     string? email, Gender gender, DateOnly birthDate)
