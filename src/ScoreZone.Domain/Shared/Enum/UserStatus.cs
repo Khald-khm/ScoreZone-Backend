@@ -1,6 +1,6 @@
 namespace ScoreZone.Domain.Shared.Enum
 {
-    public enum ClientStatus
+    public enum UserStatus
     {
         Pending = 1,
         Active = 2,

@@ -1,9 +1,9 @@
 using ScoreZone.Domain.Shared.Entities;
 using ScoreZone.Domain.Shared.Enum;
 
-namespace ScoreZone.Domain.User.Client
+namespace ScoreZone.Domain.User.Player
 {
-    public class ClientEntity : Entity
+    public class PlayerEntity : Entity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -11,11 +11,10 @@ namespace ScoreZone.Domain.User.Client
         public City Location { get; set; }
         public string Address { get; set; }
         public string ProfileImage { get; set; }
-        public ClientStatus Status { get; set; }
 
 
 
-        public ClientEntity(string firstName, string lastName, string phoneNumber, City location, string address, string profileImage)
+        public PlayerEntity(string firstName, string lastName, string phoneNumber, City location, string address, string profileImage)
         {
             FirstName = firstName;
             LastName = lastName;

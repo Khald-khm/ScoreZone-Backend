@@ -12,7 +12,6 @@ namespace ScoreZone.Domain.User.Owner
         public City Location { get; set; }
         public string Address { get; set; }
         public string ProfileImage { get; set; }
-        public ClientStatus Status { get; set; }
         
         private readonly List<FootballCourtEntity> _footballCourts = new ();
         public IReadOnlyList<FootballCourtEntity> FootballCourts => _footballCourts.AsReadOnly();

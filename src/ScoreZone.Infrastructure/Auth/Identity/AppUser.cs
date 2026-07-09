@@ -11,9 +11,9 @@ namespace ScoreZone.Infrastructure.Auth.Identity
         public string LastName { get; private set; }
         public Gender Gender { get; private set; }
         public DateOnly BirthDate { get; private set; }
+        public UserStatus Status { get; private set; }
 
-        public ICollection<RefreshToken> RefreshTokens = 
-                new List<RefreshToken>();
+        public ICollection<RefreshToken> RefreshTokens = new List<RefreshToken>();
 
         // Username => Already in IdentityUser
         // Phone => Already in IdentityUser
