@@ -3,7 +3,7 @@ using ScoreZone.Domain.Shared.Enum;
 namespace ScoreZone.Application.Auth
 {
     public record LoginRequestDTO(
-        string username,
+        string phone,
         string password
     );
 
@@ -12,7 +12,7 @@ namespace ScoreZone.Application.Auth
         string id,
         string accesToken,
         string refreshToken,
-        string username,
+        string phone,
         IList<string> roles
     );
 
@@ -21,10 +21,12 @@ namespace ScoreZone.Application.Auth
         string lastName,
         Gender gender,
         DateOnly birthDate,
-        string username,
+        // string username,
         string password,
         string phone,
-        string email,
+        string? email,
+        City city,
+        string address,
         Roles role
     );
 
@@ -36,7 +38,7 @@ namespace ScoreZone.Application.Auth
     );
 
     public record ResetPasswordRequestDTO(
-        string username,
+        string phone,
         string newPassword
     );
 }

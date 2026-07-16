@@ -1,0 +1,13 @@
+using ScoreZone.Application.User.Player.DTOs;
+using ScoreZone.Domain.User.Player;
+
+namespace ScoreZone.Application.User.Player.Mappings
+{
+    internal static class PlayerToEntity
+    {
+
+        // public static PlayerEntity ToEntity(this AddPlayerRequest request)
+        // => new(request.name, request.description, request.phoneNumber, request.city, 
+        //     request.address, request.profileImageUrl, request.locationLat, request.locationLng, request.status);
+    }
+}

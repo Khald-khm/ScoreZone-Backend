@@ -2,6 +2,8 @@ using ScoreZone.Application.Shared.Results;
 using ScoreZone.Domain.Shared.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace ScoreZone.API.Controllers
 {
@@ -9,6 +11,7 @@ namespace ScoreZone.API.Controllers
     [Route("api/[controller]")]
     [Produces("application/json")]
     [EnableRateLimiting("GlobalFallback")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public abstract class ApiController : ControllerBase
     {
 

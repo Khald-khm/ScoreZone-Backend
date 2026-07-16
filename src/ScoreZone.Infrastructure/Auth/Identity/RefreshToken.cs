@@ -1,5 +1,3 @@
-
-
 namespace ScoreZone.Infrastructure.Auth.Identity
 {
     public class RefreshToken

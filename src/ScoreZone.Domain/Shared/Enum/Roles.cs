@@ -3,6 +3,8 @@ namespace ScoreZone.Domain.Shared.Enum
     public enum Roles
     {
         Admin = 1,
-        User = 2
+        Player = 2,
+        Owner = 3,
+        Employee = 4
     }
 }

@@ -1,10 +1,10 @@
 using ScoreZone.Application.Auth;
-using ScoreZone.Application.Shared.Results;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ScoreZone.API.Controllers
 {
+    [AllowAnonymous]
     public class AuthController : ApiController
     {
         private readonly IAuthService _service;
@@ -37,5 +37,12 @@ namespace ScoreZone.API.Controllers
 
             return HandleResult(result);
         }
+
+        // API for refresh the token (get a new token)
+        // [HttpGet("refresh-token")]
+        // public async Task<IActionResult> RefreshToken([FromQuery] string refreshToken)
+        // {
+        //     var result = _service.re
+        // }
     }
 }
