@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ScoreZone.Application.Shared.Results;
 using ScoreZone.Domain.Shared.Exceptions;
 
@@ -9,11 +10,13 @@ namespace ScoreZone.Application.Shared.Services
     public abstract class BaseApplicationService
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<BaseApplicationService> _logger;
 
 
-        protected BaseApplicationService(IServiceProvider serviceProvider)
+        protected BaseApplicationService(IServiceProvider serviceProvider, ILogger<BaseApplicationService> logger)
         {
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
         
         // WITH TData & TRequest

@@ -7,6 +7,10 @@ using ScoreZone.Infrastructure.Auth.Identity;
 using Microsoft.AspNetCore.Identity;
 using ScoreZone.Infrastructure.Data;
 using ScoreZone.Application.Auth;
+using ScoreZone.Application.FootballCourt.Interfaces;
+using ScoreZone.Infrastructure.Repositories;
+using ScoreZone.Application.Facility.Interfaces;
+using ScoreZone.Application.Reservation.Interfaces;
 
 namespace ScoreZone.Infrastructure.Extensions
 {
@@ -75,9 +79,11 @@ namespace ScoreZone.Infrastructure.Extensions
             //  Repositories
             // ==========================
 
+            services.AddScoped<IFootballCourtRepository, FootballCourtRepository>();
 
+            services.AddScoped<IFacilityRepository, FacilityRepository>();
 
-
+            services.AddScoped<IReservationRepository, ReservationRepository>();
 
 
 

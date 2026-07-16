@@ -14,7 +14,15 @@ namespace ScoreZone.API.Services
             _userAccessor = userAccessor;
         }
 
-        public string? userId => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        public string? identityId => _userAccessor.HttpContext?.User.FindFirstValue("IdentityId");
+        public Guid? userId 
+        { 
+            get 
+            { 
+                var id = _userAccessor.HttpContext?.User.FindFirstValue("UserId");
+                return Guid.TryParse(id, out var result) ? result : (Guid?) null;
+            }
+        }
 
         public string? username => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
 

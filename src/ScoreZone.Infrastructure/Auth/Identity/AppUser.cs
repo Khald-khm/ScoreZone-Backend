@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using ScoreZone.Domain.Shared.Enum;
 using ScoreZone.Domain.Shared.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -7,11 +6,11 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 {
     public class AppUser : IdentityUser
     {
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
+        public string FirstName { get; private set; } = null!;
+        public string LastName { get; private set; } = null!;
         public Gender Gender { get; private set; }
         public DateOnly BirthDate { get; private set; }
-        public UserStatus Status { get; private set; }
+        public UserStatus Status { get; private set; } = UserStatus.Pending;
 
         public ICollection<RefreshToken> RefreshTokens = new List<RefreshToken>();
 
@@ -22,23 +21,25 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 
         private AppUser() {} // needed by Identity/EF Core
 
-        public AppUser(string firstName, string lastName, string username, string phoneNumber,
+        public AppUser(string firstName, string lastName, string phoneNumber,
                     string? email, Gender gender, DateOnly birthDate)
         {
-            BusinessRules(firstName, lastName, username, phoneNumber, gender, birthDate);
+            BusinessRules(firstName, lastName, phoneNumber, gender, birthDate);
+
+            Id = Guid.NewGuid().ToString();
 
             FirstName = firstName;
             LastName = lastName;
             Gender = gender;
             BirthDate = birthDate;
             
-            UserName = username;
+            UserName = phoneNumber;
             PhoneNumber = phoneNumber;
-            Email = email;
+            Email = email ?? null;
         }
 
 
-        private static void BusinessRules(string firstName, string lastName, string username, string phoneNumber, 
+        private static void BusinessRules(string firstName, string lastName, string phoneNumber, 
                     Gender gender, DateOnly birthDate)
         {
             if(string.IsNullOrWhiteSpace(firstName))
@@ -46,9 +47,6 @@ namespace ScoreZone.Infrastructure.Auth.Identity
             
             if(string.IsNullOrWhiteSpace(lastName))
                 throw new DomainException(400, "Last Name Field is Required.");
-
-            if(string.IsNullOrWhiteSpace(username))
-                throw new DomainException(400, "Username Field is Required.");
             
             if(string.IsNullOrWhiteSpace(phoneNumber))
                 throw new DomainException(400, "Phone Number Field is Required.");

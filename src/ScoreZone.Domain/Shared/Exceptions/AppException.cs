@@ -4,6 +4,9 @@ namespace ScoreZone.Domain.Shared.Exceptions
     {
         public int StatusCode { get; }
 
-        public AppException(int statusCode, string message = "Application Error.") : base(message) { }
+        public AppException(int statusCode, string message = "Application Error.") : base(message) 
+        { 
+            StatusCode = statusCode;
+        }
     }
 }

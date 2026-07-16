@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using ScoreZone.Infrastructure.Options;
 
@@ -10,9 +11,8 @@ namespace ScoreZone.API.Extensions
         public static void AddJwtAuthenticationConfiguration(this IServiceCollection services, IConfiguration config)
         {
             var jwtSettings = config.GetSection("JWT").Get<JwtOptions>();
-            // var jwtOptions = JwtOptions
 
-            services.AddAuthentication()
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
