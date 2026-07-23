@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using ScoreZone.Application.Facility.DTOs;
 using ScoreZone.Application.Facility.Interfaces;
 using ScoreZone.Application.FootballCourt.DTOs;
+using System.Net.Mime;
+using ScoreZone.Domain.Shared.Enum;
 
 namespace ScoreZone.API.Controllers
 {
@@ -18,17 +20,27 @@ namespace ScoreZone.API.Controllers
             _footballCourtService = footballCourtService;
             _facilityService = facilityService;
         }
+        
 
         [HttpPost("add-facility")]
-        public async Task<IActionResult> AddFacility(AddFacilityRequest request)
+        [Authorize(Roles = "Admin")]
+        [EndpointSummary("Create Facility")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [Consumes(MediaTypeNames.Multipart.FormData)]
+        public async Task<IActionResult> AddFacility([FromForm] AddFacilityRequest request)
         {
             var result = await _facilityService.AddAsync(request);
 
             return HandleResult(result);
         }
+
         
         [HttpPost("add-football-court")]
-        public async Task<IActionResult> AddFootballCourt(AddFootballCourtRequest request)
+        [Authorize(Roles = "Admin")]
+        [EndpointSummary("Create Football Court")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [Consumes(MediaTypeNames.Multipart.FormData)]
+        public async Task<IActionResult> AddFootballCourt([FromForm] AddFootballCourtRequest request)
         {
             var result = await _footballCourtService.AddAsync(request);
 

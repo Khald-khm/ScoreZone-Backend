@@ -7,7 +7,7 @@ namespace ScoreZone.Application.FootballCourt.Mappings
     internal static class FootballCourtToDto
     {
         public static FootballCourtDetailsDto ToDto(this FootballCourtEntity entity)
-            => new(entity.FacilityId, entity.OwnerId, entity.Name, entity.PhoneNumber, entity.City, 
+            => new(entity.Id, entity.FacilityId, entity.OwnerId, entity.Name, entity.Facility.Name, entity.PhoneNumber, entity.City, 
                 entity.Address, entity.ProfileImage, entity.Type, entity.Capacity, entity.PricePerMatch, 
                 entity.IsPartialAllowed, entity.LocationLat, entity.LocationLng, entity.Status, 
                 entity.CourtImages.Select(x => x.ToDto()).ToList());

@@ -183,11 +183,11 @@ namespace ScoreZone.Infrastructure.Migrations
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("LocationLat")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LocationLat")
+                        .HasColumnType("float");
 
-                    b.Property<decimal?>("LocationLng")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LocationLng")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -414,11 +414,11 @@ namespace ScoreZone.Infrastructure.Migrations
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("LocationLat")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("LocationLat")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("LocationLng")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("LocationLng")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -991,7 +991,7 @@ namespace ScoreZone.Infrastructure.Migrations
 
             modelBuilder.Entity("ScoreZone.Domain.FootballCourt.FootballCourtEntity", b =>
                 {
-                    b.HasOne("ScoreZone.Domain.Facility.FacilityEntity", "Facitlity")
+                    b.HasOne("ScoreZone.Domain.Facility.FacilityEntity", "Facility")
                         .WithMany("FootballCourts")
                         .HasForeignKey("FacilityId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1003,7 +1003,7 @@ namespace ScoreZone.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Facitlity");
+                    b.Navigation("Facility");
 
                     b.Navigation("Owner");
                 });

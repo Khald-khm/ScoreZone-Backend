@@ -24,7 +24,7 @@ namespace ScoreZone.API.Services
             }
         }
 
-        public string? username => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+        public string? phoneNumber => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
 
         public string? role => _userAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
 

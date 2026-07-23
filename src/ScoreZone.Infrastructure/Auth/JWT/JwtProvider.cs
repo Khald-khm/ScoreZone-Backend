@@ -19,7 +19,7 @@ namespace ScoreZone.Infrastructure.Auth.JWT
         }
         
 
-        public Task<string> CreateToken(string identityId, Guid userId, string firstName, string lastName, string phoneNumber, IList<string> roles)
+        public Task<string> CreateToken(string identityId, Guid userId, string phoneNumber, IList<string> roles)
         {
             var claims = new List<Claim>
             {
@@ -47,7 +47,7 @@ namespace ScoreZone.Infrastructure.Auth.JWT
                 issuer : _jwtOptions.Issuer,
                 audience : _jwtOptions.Audience,
                 claims : claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiryMintues),
+                expires: DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiryMinutes),
                 signingCredentials : credentials
             );
 

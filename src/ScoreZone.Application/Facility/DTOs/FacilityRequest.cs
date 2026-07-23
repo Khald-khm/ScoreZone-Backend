@@ -11,8 +11,8 @@ namespace ScoreZone.Application.Facility.DTOs
         string address, 
         IFormFile? profileImage, 
         string? profileImageUrl, 
-        decimal? locationLat, 
-        decimal? locationLng, 
+        double? locationLat, 
+        double? locationLng, 
         FacilityStatus status
     );
 }

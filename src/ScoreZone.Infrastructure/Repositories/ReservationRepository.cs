@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ScoreZone.Application.Reservation.DTOs;
 using ScoreZone.Application.Reservation.Interfaces;
-using ScoreZone.Application.Shared.DTOs;
 using ScoreZone.Domain.Reservation;
 using ScoreZone.Infrastructure.Data;
 

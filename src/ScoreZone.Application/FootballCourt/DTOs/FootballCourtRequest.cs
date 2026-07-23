@@ -17,8 +17,15 @@ namespace ScoreZone.Application.FootballCourt.DTOs
         int capacity,
         int pricePerMatch, 
         bool isPartialAllowed, 
-        decimal locationLat, 
-        decimal locationLng, 
+        double locationLat, 
+        double locationLng, 
         CourtStatus status
+    );
+
+    public record LocationCoordsRequest
+    (
+        City city,
+        double locationLat, 
+        double locationLng
     );
 }

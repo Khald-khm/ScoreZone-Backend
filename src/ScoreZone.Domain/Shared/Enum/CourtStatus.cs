@@ -4,6 +4,7 @@ namespace ScoreZone.Domain.Shared.Enum
     {
         Pending = 1,
         Active = 2,
-        Rejected = 3
+        Rejected = 3,
+        Blocked = 4
     }
 }

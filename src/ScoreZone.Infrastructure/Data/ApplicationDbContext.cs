@@ -77,7 +77,6 @@ namespace ScoreZone.Infrastructure.Data
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            _logger.LogWarning("Custom SaveChangesAsync START. Pending changes: {Count}", ChangeTracker.Entries().Count());
             var domainEntities = ChangeTracker.Entries<Entity>()
                                 .Where(x => x.Entity.DomainEvents.Any())
                                 .ToList();

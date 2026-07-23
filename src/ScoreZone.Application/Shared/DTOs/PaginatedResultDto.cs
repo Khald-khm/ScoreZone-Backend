@@ -2,7 +2,7 @@ namespace ScoreZone.Application.Shared.DTOs
 {
     public class PaginatedResultDto<T>
     {
-        public IReadOnlyList<T> Items { get; }
+        public IReadOnlyCollection<T> Items { get; }
         public int PageNumber { get; }
         public int PageSize { get; }
         public int TotalCount { get; }
@@ -11,7 +11,7 @@ namespace ScoreZone.Application.Shared.DTOs
         public bool HasNext => PageNumber < TotalPages;
 
 
-        public PaginatedResultDto(IReadOnlyList<T> items, int totalCount, int pageNumber, int pageSize)
+        public PaginatedResultDto(IReadOnlyCollection<T> items, int totalCount, int pageNumber, int pageSize)
         {
             Items = items;
             TotalCount = totalCount;

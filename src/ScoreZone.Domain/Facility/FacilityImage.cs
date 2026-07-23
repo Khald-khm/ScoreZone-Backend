@@ -14,6 +14,13 @@ namespace ScoreZone.Domain.Facility
         
 
         private FacilityImage(){} // For EF Core
+
+        public FacilityImage(Guid facilityId, string imageUrl)
+        {
+            FacilityId = facilityId;
+            ImageUrl = imageUrl;
+        }
+        
         public void Add(Guid facilityId, string imageUrl)
         {
             if(facilityId == Guid.Empty)

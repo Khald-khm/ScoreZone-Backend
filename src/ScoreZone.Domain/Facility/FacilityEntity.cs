@@ -13,8 +13,8 @@ namespace ScoreZone.Domain.Facility
         public City City { get; set; }
         public string Address { get; set; } = null!;
         public string? ProfileImage { get; set; }
-        public decimal? LocationLat { get; set; }
-        public decimal? LocationLng { get; set; }
+        public double? LocationLat { get; set; }
+        public double? LocationLng { get; set; }
         public int rating { get; set; }
         public FacilityStatus Status { get; set; }
 
@@ -27,7 +27,7 @@ namespace ScoreZone.Domain.Facility
         private FacilityEntity() {} // For EF Core
         
         public FacilityEntity(string name, string? description, string phoneNumber, City city, string address, 
-                string? profileImage, decimal? locationLat, decimal? locationLng, FacilityStatus status)
+                string? profileImage, double? locationLat, double? locationLng, FacilityStatus status)
         {
 
             BusinessRules(name, phoneNumber, city, address, locationLat, locationLng, status);
@@ -44,10 +44,10 @@ namespace ScoreZone.Domain.Facility
             Status = status;
         }
 
-        
+        // TODO: CHECK THE PROFILE IMAGE WHICH IS NULLABLE OR NOT
 
         public void Update(string name, string? description, string phoneNumber, City city, string address, 
-                string profileImage, decimal? locationLat, decimal? locationLng, FacilityStatus status)
+                string? profileImage, double? locationLat, double? locationLng, FacilityStatus status)
         {
 
             BusinessRules(name, phoneNumber, city, address, locationLat, locationLng, status);
@@ -57,7 +57,7 @@ namespace ScoreZone.Domain.Facility
             PhoneNumber = phoneNumber;
             City = city;
             Address = address;
-            ProfileImage = profileImage;
+            ProfileImage = profileImage ?? null;
             LocationLat = locationLat ?? null;
             LocationLng = locationLng ?? null;
             rating = 0;
@@ -65,9 +65,27 @@ namespace ScoreZone.Domain.Facility
         }
 
 
+        // Change Status
+        public void Pend()
+        {
+            Status = FacilityStatus.Pending;
+        }
+        public void Accept()
+        {
+            Status = FacilityStatus.Active;
+        }
+        public void Reject()
+        {
+            Status = FacilityStatus.Rejected;
+        }
+        public void Block()
+        {
+            Status = FacilityStatus.Blocked;
+        }
 
-        public void BusinessRules(string name, string phoneNumber, City city, string address, 
-                decimal? locationLat, decimal? locationLng, FacilityStatus status)
+
+        private static void BusinessRules(string name, string phoneNumber, City city, string address, 
+                double? locationLat, double? locationLng, FacilityStatus status)
         {
             if(string.IsNullOrWhiteSpace(name))
                 throw new DomainException(400, "Name Field is Required.");

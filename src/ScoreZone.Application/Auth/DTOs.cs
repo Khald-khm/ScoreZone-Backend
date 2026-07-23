@@ -41,4 +41,8 @@ namespace ScoreZone.Application.Auth
         string phone,
         string newPassword
     );
+
+    public record TokenDTO(
+        string token
+    );
 }

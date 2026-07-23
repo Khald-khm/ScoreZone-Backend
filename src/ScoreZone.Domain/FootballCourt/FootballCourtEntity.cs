@@ -21,15 +21,17 @@ namespace ScoreZone.Domain.FootballCourt
         public int Capacity { get; set; }
         public int PricePerMatch { get; set; }
         public bool IsPartialAllowed { get; set; }
-        public decimal LocationLat { get; set; }
-        public decimal LocationLng { get; set; }
+        public double LocationLat { get; set; }
+        public double LocationLng { get; set; }
         public CourtStatus Status { get; set; }
+
+        // DON'T FORGET SPECIAL COURTS
         
 
         // Navigation Property
         public List<CourtImage> CourtImages { get; set; } = new();
         public List<ReservationEntity> Reservations { get; set; } = new();
-        public FacilityEntity Facitlity { get; set; } = null!;
+        public FacilityEntity Facility { get; set; } = null!;
         public OwnerEntity Owner { get; set; } = null!;
 
 
@@ -37,7 +39,7 @@ namespace ScoreZone.Domain.FootballCourt
 
         public FootballCourtEntity(Guid facilityId, Guid ownerId, string name, string phoneNumber, 
                     City city, string address, string? profileImage, CourtType type, int capacity,
-                    int pricePerMatch, bool isPartialAllowed, decimal locationLat, decimal locationLng, CourtStatus status)
+                    int pricePerMatch, bool isPartialAllowed, double locationLat, double locationLng, CourtStatus status)
         {
             BusinessRules(facilityId, name, phoneNumber, city, address, profileImage, type, 
                     capacity, pricePerMatch, isPartialAllowed, locationLat, locationLng, status);
@@ -63,7 +65,7 @@ namespace ScoreZone.Domain.FootballCourt
 
         public void Update(Guid facilityId, string name, string phoneNumber, City city, 
                     string address, string? profileImage, CourtType type, int capacity, int pricePerMatch, 
-                    bool isPartialAllowed, decimal locationLat, decimal locationLng, CourtStatus status)
+                    bool isPartialAllowed, double locationLat, double locationLng, CourtStatus status)
         {
 
             BusinessRules(facilityId, name, phoneNumber, city, address, profileImage, type, 
@@ -86,9 +88,31 @@ namespace ScoreZone.Domain.FootballCourt
         }
 
 
+
+        // Change Status
+        public void Pend()
+        {
+            Status = CourtStatus.Pending;
+        }
+        public void Accept()
+        {
+            Status = CourtStatus.Active;
+        }
+        public void Reject()
+        {
+            Status = CourtStatus.Rejected;
+        }
+        public void Block()
+        {
+            Status = CourtStatus.Blocked;
+        }
+
+
+
+
         public void BusinessRules(Guid facilityId, string name, string phoneNumber, City city, 
                     string address, string? profileImage, CourtType type, int capacity, int pricePerMatch, 
-                    bool isPartialAllowed, decimal locationLat, decimal locationLng, CourtStatus status)
+                    bool isPartialAllowed, double locationLat, double locationLng, CourtStatus status)
         {
             if(facilityId == Guid.Empty)
                 throw new DomainException(400, "Facility Id Field is Required.");
