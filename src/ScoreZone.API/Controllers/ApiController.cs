@@ -9,9 +9,15 @@ namespace ScoreZone.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Produces("application/json")]
-    [EnableRateLimiting("GlobalFallback")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [EnableRateLimiting("GlobalFallback")]
+    [Produces("application/json")]
+    // ---- GLOBAL RESPONSE TYPES ---- 
+    // [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public abstract class ApiController : ControllerBase
     {
 
@@ -25,7 +31,7 @@ namespace ScoreZone.API.Controllers
                     message = success.Message
                 }),
 
-                validationError => StatusCode( StatusCodes.Status400BadRequest, new
+                validationError => StatusCode(StatusCodes.Status400BadRequest, new
                 {
                     type = "Validation Error",
                     message = validationError.errors.Select(e => new { field = e.PropertyName, error = e.ErrorMessage})
@@ -54,7 +60,7 @@ namespace ScoreZone.API.Controllers
                 {
                     type = Enum.GetName(typeof(HttpResult), data.StatusCode),
                     message = data.Message,
-                    datat = data.Data
+                    data = data.Data
                 }),
 
                 success => StatusCode(success.StatusCode, new

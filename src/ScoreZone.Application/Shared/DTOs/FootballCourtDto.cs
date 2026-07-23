@@ -4,9 +4,11 @@ using ScoreZone.Domain.Shared.Enum;
 namespace ScoreZone.Application.Shared.DTOs
 {
     public record FootballCourtDetailsDto(
+        Guid id,
         Guid facilityId,
         Guid ownerId, 
         string? name, 
+        string? facilityName,
         string phoneNumber, 
         City city, 
         string address,
@@ -15,10 +17,11 @@ namespace ScoreZone.Application.Shared.DTOs
         int capacity,
         int pricePerMatch, 
         bool isPartialAllowed, 
-        decimal locationLat, 
-        decimal locationLng, 
+        double locationLat, 
+        double locationLng, 
         CourtStatus status,
-        List<FootballCourtImageDto> courtImages
+        List<FootballCourtImageDto> courtImages,
+        double? distance = null
     );
 
     public record FootballCourtImageDto(Guid courtId, string imageUrl);

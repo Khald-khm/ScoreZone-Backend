@@ -30,8 +30,6 @@ namespace ScoreZone.Application.User.Player.Interfaces
         //     {
         //         var player = request.ToEntity();
 
-        //         //TODO: UPLOAD PROFILE IMAGE
-
         //         _fileService.UploadFileAsync(player.ProfileImage);
 
         //         await _repo.AddAsync(player);
@@ -41,7 +39,6 @@ namespace ScoreZone.Application.User.Player.Interfaces
 
         // public async Task<AppResult> GetByIdAsync(Guid id)
         // {
-        //     // TODO: MAKE DTO TO RETURN IT IN THE RESULT
         //     return await ExecuteAsync(id, async () =>
         //     {
         //        await _repo.GetByIdAsync(id); 

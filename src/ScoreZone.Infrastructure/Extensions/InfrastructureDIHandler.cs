@@ -11,6 +11,7 @@ using ScoreZone.Application.FootballCourt.Interfaces;
 using ScoreZone.Infrastructure.Repositories;
 using ScoreZone.Application.Facility.Interfaces;
 using ScoreZone.Application.Reservation.Interfaces;
+using ScoreZone.Application.User.Owner.Interfaces;
 
 namespace ScoreZone.Infrastructure.Extensions
 {
@@ -82,6 +83,8 @@ namespace ScoreZone.Infrastructure.Extensions
             services.AddScoped<IFootballCourtRepository, FootballCourtRepository>();
 
             services.AddScoped<IFacilityRepository, FacilityRepository>();
+
+            services.AddScoped<IOwnerRepository, OwnerRepository>();
 
             services.AddScoped<IReservationRepository, ReservationRepository>();
 

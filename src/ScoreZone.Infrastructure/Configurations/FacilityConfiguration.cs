@@ -13,7 +13,7 @@ namespace ScoreZone.Infrastructure.Configurations
             builder.HasKey(x => x.Id);
 
             builder.HasMany(x => x.FootballCourts)
-                .WithOne(c => c.Facitlity)
+                .WithOne(c => c.Facility)
                 .HasForeignKey(x => x.FacilityId)
                 .OnDelete(DeleteBehavior.NoAction);
 

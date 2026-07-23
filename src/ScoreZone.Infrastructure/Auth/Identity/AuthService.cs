@@ -5,7 +5,6 @@ using ScoreZone.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using ScoreZone.Application.Shared.Services;
 using ScoreZone.Domain.Shared.Exceptions;
-using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
 using ScoreZone.Domain.Shared.Enum;
 using ScoreZone.Domain.User.Player;
@@ -53,9 +52,12 @@ namespace ScoreZone.Infrastructure.Auth.Identity
                 
                 var roles = await _userManager.GetRolesAsync(user);
 
+                if(roles == null || !roles.Any())
+                    throw new AppException(404, "Roles Not Found.");
+
                 var entityId = await GetEntityIdAsync(user.Id, roles.First());
 
-                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, user.FirstName, user.LastName, user.PhoneNumber!, roles);
+                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, user.PhoneNumber!, roles);
 
                 var refreshToken = _jwtProvider.CreateRefreshToken();
 
@@ -118,7 +120,7 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 
                 var roles = await _userManager.GetRolesAsync(user);
 
-                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, user.FirstName, user.LastName, user.PhoneNumber!, roles);
+                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, user.PhoneNumber!, roles);
 
                 var refreshToken = _jwtProvider.CreateRefreshToken();
 
@@ -133,7 +135,6 @@ namespace ScoreZone.Infrastructure.Auth.Identity
                 await _context.RefreshTokens.AddAsync(refreshTokenEntity);
                 await _context.SaveChangesAsync();
 
-                // TODO: MAYBE YOU SHOULD SEND THE ID OF THE USER (PLAYER, OWNER....)
                 return new RegisterResponseDTO(user.Id, accessToken, refreshToken, roles);
 
             }, 201);
@@ -156,13 +157,11 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 
                 if(user is null)
                     throw new DomainException(404, "User Not Found.");
-                
-                var removePassword = await _userManager.RemovePasswordAsync(user);
+                    
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                if(!removePassword.Succeeded)
-                    throw new DomainException(400, "Faild to Remove Old Password.");
-
-                var result = await _userManager.AddPasswordAsync(user, request.newPassword);
+                // var result = await _userManager.AddPasswordAsync(user, request.newPassword);
+                var result = await _userManager.ResetPasswordAsync(user, token, request.newPassword);
 
                 if(!result.Succeeded)
                     throw new DomainException(400, "Faild to Set The New Password.");
@@ -171,6 +170,39 @@ namespace ScoreZone.Infrastructure.Auth.Identity
             }, 204);
             
         }
+
+
+
+        public async Task<AppResult<string>> RenewToken(string refreshToken)
+        {
+            return await ExecuteAsync(refreshToken, async () =>
+            {
+                    
+                var token = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == refreshToken);
+                
+                if(token is null)
+                    throw new AppException(404, "Token is Not Valid.");
+
+                var user = await _userManager.FindByIdAsync(token.UserId);
+
+                if(user is null)
+                    throw new DomainException(401, "Phone Number is Not Valid.");
+                
+                
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if(roles == null || !roles.Any())
+                    throw new AppException(404, "Roles Not Found.");
+
+                var entityId = await GetEntityIdAsync(user.Id, roles.First());
+
+                var newToken = await _jwtProvider.CreateToken(user.Id, entityId, user.PhoneNumber!, roles);
+
+                return newToken;
+            });
+        }
+
+
 
 
 

@@ -5,7 +5,6 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 {
     public static class RoleSeeder
     {
-        // TODO: Add role seeder to project startup
         public static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
         {
             foreach(var role in Enum.GetNames(typeof(Roles)))
