@@ -15,6 +15,10 @@ namespace ScoreZone.Application.Reservation.Interfaces
         Task<IReadOnlyList<ReservationEntity>> GetAllByDayAsync(Guid courtId, DateOnly date);
 
         Task<(int count, IReadOnlyList<MyReservation> items)> GetMyReservationsAsync(Guid playerId, int skip, int pageSize);
+
+        Task<IReadOnlyList<ReservationDetails>> DailyReservations(DateOnly date, List<Guid> courtIds);
+
+        Task<IReadOnlyList<SearchReservationDetails>> Search(string searchWord);
         
     }
     

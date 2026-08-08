@@ -4,7 +4,8 @@ namespace ScoreZone.Domain.Reservation.Enums
     {
         Pending = 1,
         Confirmed = 2,
-        Done = 3,
-        Canceled = 4
+        Paid = 3,
+        Done = 4,
+        Canceled = 5
     }
 }

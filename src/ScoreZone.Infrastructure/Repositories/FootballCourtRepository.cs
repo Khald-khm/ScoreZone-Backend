@@ -23,7 +23,7 @@ namespace ScoreZone.Infrastructure.Repositories
 
         public async Task AddAsync(FootballCourtEntity court)
         {
-            await _context.AddAsync(court);
+            await _context.FootballCourts.AddAsync(court);
         }
 
         public async Task<(int count , IReadOnlyCollection<FootballCourtDetailsDto> items)> GetAllAsync(int skip, int take)

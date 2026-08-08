@@ -6,7 +6,6 @@ namespace ScoreZone.Application.Shared.Interfaces
     {
         string? identityId { get; }
         Guid? userId { get; }
-        string? phoneNumber { get; }
         string? role { get; }
     }
 }

@@ -38,6 +38,20 @@ namespace ScoreZone.Infrastructure.Auth.Identity
             Email = email ?? null;
         }
 
+        public void Update(string firstName, string lastName, string phoneNumber,
+                    string? email, Gender gender, DateOnly birthDate)
+        {
+            BusinessRules(firstName, lastName, phoneNumber, gender, birthDate);
+
+            FirstName = firstName;
+            LastName = lastName;
+            Gender = gender;
+            BirthDate = birthDate;
+            UserName = phoneNumber;
+            PhoneNumber = phoneNumber;
+            Email = email ?? null;
+        }
+
 
         private static void BusinessRules(string firstName, string lastName, string phoneNumber, 
                     Gender gender, DateOnly birthDate)

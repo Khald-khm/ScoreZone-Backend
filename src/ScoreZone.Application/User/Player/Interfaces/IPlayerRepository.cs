@@ -8,6 +8,8 @@ namespace ScoreZone.Application.User.Player.Interfaces
         Task AddAsync(PlayerEntity player);
 
         Task<PlayerEntity?> GetByIdAsync(Guid id);
+
+        Task DeleteAsync(Guid id);
         
     }
     

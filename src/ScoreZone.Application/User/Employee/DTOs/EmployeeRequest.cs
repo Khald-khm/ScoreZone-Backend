@@ -1,20 +1,21 @@
 using Microsoft.AspNetCore.Http;
 using ScoreZone.Domain.Shared.Enum;
 
-namespace ScoreZone.Application.User.Owner.DTOs
+namespace ScoreZone.Application.User.Employee.DTOs
 {
-    public record AddOwnerRequest(
+    public record AddEmployeeRequest(
         string identityId,
+        Guid ownerId,
         string firstName, 
-        string lastName, 
+        string lastName,  
         string phoneNumber, 
         City city, 
         string address, 
-        IFormFile? profileImage,
-        string profileImageUrl
+        IFormFile? profileImage, 
+        string? profileImageUrl
     );
-
-    public record UpdateOwnerRequest(
+    
+    public record UpdateEmployeeRequest(
         string firstName, 
         string lastName, 
         City city, 

@@ -12,6 +12,8 @@ using ScoreZone.Infrastructure.Repositories;
 using ScoreZone.Application.Facility.Interfaces;
 using ScoreZone.Application.Reservation.Interfaces;
 using ScoreZone.Application.User.Owner.Interfaces;
+using ScoreZone.Application.User.Player.Interfaces;
+using ScoreZone.Application.User.Employee.Interfaces;
 
 namespace ScoreZone.Infrastructure.Extensions
 {
@@ -84,11 +86,13 @@ namespace ScoreZone.Infrastructure.Extensions
 
             services.AddScoped<IFacilityRepository, FacilityRepository>();
 
-            services.AddScoped<IOwnerRepository, OwnerRepository>();
-
             services.AddScoped<IReservationRepository, ReservationRepository>();
 
+            services.AddScoped<IOwnerRepository, OwnerRepository>();
 
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+            
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 
 

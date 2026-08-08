@@ -12,6 +12,7 @@ namespace ScoreZone.Application.Reservation.DTOs
         string? courtImage,
         CourtType courtType,
         City courtCity,
+        int pricePerMatch,
         string facilityName,
         int timeSlotNum,
         ReservationStatus status,
@@ -36,5 +37,26 @@ namespace ScoreZone.Application.Reservation.DTOs
     public record ReservedSlots(
         Guid id,
         int timeSlotNum
+    );
+
+    public record SearchReservationDetails(
+        Guid id,
+        Guid playerId,
+        Guid courtId,
+        string firstName,
+        string lastName,
+        string phoneNumber,
+        string courtName,
+        string? courtImage,
+        CourtType courtType,
+        City courtCity,
+        int pricePerMatch,
+        string facilityName,
+        int timeSlotNum,
+        ReservationStatus status,
+        int deposite,
+        int payment,
+        DateOnly reservationDate,
+        DateTime? checkedInAt
     );
 }

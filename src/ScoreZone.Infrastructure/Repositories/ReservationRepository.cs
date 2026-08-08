@@ -22,7 +22,7 @@ namespace ScoreZone.Infrastructure.Repositories
 
         public async Task AddAsync(ReservationEntity court)
         {
-            await _context.AddAsync(court);
+            await _context.Reservations.AddAsync(court);
         }
 
         public async Task<ReservationEntity?> GetByIdAsync(Guid id)
@@ -43,7 +43,7 @@ namespace ScoreZone.Infrastructure.Repositories
                     facility => facility.Id, (combined, facility) => 
                     new ReservationDetails(
                         combined.reservation.Id, combined.reservation.PlayerId, combined.reservation.CourtId, combined.court.Name, 
-                        combined.court.ProfileImage, combined.court.Type, combined.court.City, facility.Name, 
+                        combined.court.ProfileImage, combined.court.Type, combined.court.City, combined.reservation.PricePerMatch, facility.Name, 
                         combined.reservation.TimeSlotNum, combined.reservation.Status, combined.reservation.Deposite, 
                         combined.reservation.Payment, combined.reservation.ReservationDate, combined.reservation.CheckedInAt))
                 .FirstOrDefaultAsync();
@@ -58,7 +58,7 @@ namespace ScoreZone.Infrastructure.Repositories
 
         public async Task<(int count, IReadOnlyList<MyReservation> items)> GetMyReservationsAsync(Guid playerId, int skip, int pageSize)
         {
-            var items =  await _context.Reservations
+            var query =  _context.Reservations
                 .AsNoTracking()
                 .Where(x => x.PlayerId == playerId)
                 .Join(_context.FootballCourts, 
@@ -75,31 +75,52 @@ namespace ScoreZone.Infrastructure.Repositories
                         reservation.TimeSlotNum,
                         reservation.Status,
                         reservation.ReservationDate
-                ))
+                ));
+            
+            var count = await query.CountAsync();
+
+            var items = await query
                 .Skip(skip)
                 .Take(pageSize)
                 .ToListAsync();
-            
-            var count = await _context.Reservations
-                .AsNoTracking()
-                .Where(x => x.PlayerId == playerId)
-                .Join(_context.FootballCourts, 
-                    reservation => reservation.CourtId, 
-                    court => court.Id, 
-                    (reservation, court) => new MyReservation
-                    (
-                        reservation.Id,
-                        playerId,
-                        reservation.CourtId,
-                        court.Name,
-                        court.ProfileImage,
-                        court.Type,
-                        reservation.TimeSlotNum,
-                        reservation.Status,
-                        reservation.ReservationDate
-                )).CountAsync();
 
             return (count, items);
+        }
+
+
+        public async Task<IReadOnlyList<ReservationDetails>> DailyReservations(DateOnly date, List<Guid> courtIds)
+        {
+            var reservations = await _context.Reservations
+                .AsNoTracking()
+                .Where(x => courtIds.Contains(x.CourtId) && x.ReservationDate == date)
+                .Select(res => new ReservationDetails(
+                        res.Id, res.PlayerId, res.CourtId, res.FootballCourt.Name , 
+                        res.FootballCourt.ProfileImage, res.FootballCourt.Type, res.FootballCourt.City, res.PricePerMatch, res.FootballCourt.Facility.Name, 
+                        res.TimeSlotNum, res.Status, res.Deposite, 
+                        res.Payment, res.ReservationDate, res.CheckedInAt))
+                .OrderBy(x => x.timeSlotNum)
+                .ToListAsync();
+            
+            return reservations;
+        }
+
+
+        public async Task<IReadOnlyList<SearchReservationDetails>> Search(string searchWord)
+        {
+            return await _context.Reservations
+                .AsNoTracking()
+                .Include(x => x.Player)
+                .Include(x => x.FootballCourt)
+                    .ThenInclude(x => x.Facility)
+                .Join(_context.Players, 
+                    reservation => reservation.PlayerId, 
+                    player => player.Id, (reservation, player) => new SearchReservationDetails(reservation.Id, reservation.PlayerId, reservation.CourtId, reservation.Player.FirstName, reservation.Player.LastName, reservation.Player.PhoneNumber, reservation.FootballCourt.Name , 
+                        reservation.FootballCourt.ProfileImage, reservation.FootballCourt.Type, reservation.FootballCourt.City, reservation.PricePerMatch, reservation.FootballCourt.Facility.Name, 
+                        reservation.TimeSlotNum, reservation.Status, reservation.Deposite, 
+                        reservation.Payment, reservation.ReservationDate, reservation.CheckedInAt))
+                .Where(x => x.firstName.Contains(searchWord) || searchWord.Contains(x.firstName) || x.lastName.Contains(searchWord) || searchWord.Contains(x.lastName) || x.phoneNumber.Contains(searchWord) || searchWord.Contains(x.phoneNumber))
+                .ToListAsync();
+
         }
     }
 }

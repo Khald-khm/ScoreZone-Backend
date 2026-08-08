@@ -1,18 +1,18 @@
 using ScoreZone.Application.Auth;
-using ScoreZone.Application.User.Owner.DTOs;
 using ScoreZone.Application.User.Player.DTOs;
-using ScoreZone.Domain.User.Owner;
+using ScoreZone.Domain.User.Player;
 
-namespace ScoreZone.Application.User.Owner.Mappings
+namespace ScoreZone.Application.User.Player.Mappings
 {
-    internal static class OwnerToDto
+    internal static class PlayerToDto
     {
 
-        public static OwnerDetailsResponse ToDto(this OwnerEntity entity)
+
+        public static PlayerDetailsResponse ToDto(this PlayerEntity entity)
         => new(entity.Id, entity.FirstName, entity.LastName, entity.PhoneNumber, entity.City, 
             entity.Address, entity.ProfileImage);
         
-        public static UpdateProfileDTO ToAuth(this UpdateOwnerRequest request)
+        public static UpdateProfileDTO ToAuth(this UpdatePlayerRequest request)
         => new(request.firstName, request.lastName, request.gender, request.birthDate, request.email, request.city, request.address);
 
     }

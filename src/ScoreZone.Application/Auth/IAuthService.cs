@@ -8,6 +8,10 @@ namespace ScoreZone.Application.Auth
 
         Task<AppResult<RegisterResponseDTO>> RegisterAsync(RegisterRequestDTO request);
 
+        Task<AppResult> UpdateProfileAsync(string id, UpdateProfileDTO request);
+        
+        Task<AppResult> DeleteProfileAsync(string id);
+
         Task<AppResult> ResetPasswordAsync(ResetPasswordRequestDTO request);
 
         Task<AppResult<string>> RenewToken(string refreshToken);

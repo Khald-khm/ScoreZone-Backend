@@ -44,7 +44,6 @@ namespace ScoreZone.Domain.Facility
             Status = status;
         }
 
-        // TODO: CHECK THE PROFILE IMAGE WHICH IS NULLABLE OR NOT
 
         public void Update(string name, string? description, string phoneNumber, City city, string address, 
                 string? profileImage, double? locationLat, double? locationLng, FacilityStatus status)

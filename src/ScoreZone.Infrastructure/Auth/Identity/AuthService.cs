@@ -57,7 +57,7 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 
                 var entityId = await GetEntityIdAsync(user.Id, roles.First());
 
-                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, user.PhoneNumber!, roles);
+                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, roles);
 
                 var refreshToken = _jwtProvider.CreateRefreshToken();
 
@@ -120,7 +120,7 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 
                 var roles = await _userManager.GetRolesAsync(user);
 
-                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, user.PhoneNumber!, roles);
+                var accessToken = await _jwtProvider.CreateToken(user.Id, entityId, roles);
 
                 var refreshToken = _jwtProvider.CreateRefreshToken();
 
@@ -138,10 +138,44 @@ namespace ScoreZone.Infrastructure.Auth.Identity
                 return new RegisterResponseDTO(user.Id, accessToken, refreshToken, roles);
 
             }, 201);
-
-
         }
 
+
+        // ===============================
+        //  UPDATE 
+        // ===============================
+        public async Task<AppResult> UpdateProfileAsync(string id, UpdateProfileDTO request)
+        {
+            return await ExecuteAsync(request, async () =>
+            {
+                if(string.IsNullOrWhiteSpace(id))
+                    throw new AppException(404, "Identity Id Not Found.");
+
+                var user = await _userManager.FindByIdAsync(id);
+
+                if(user is null)
+                    throw new AppException(404, "User Not Found.");
+
+                user.Update(request.firstName, request.lastName, user.PhoneNumber!, request.email, request.gender, request.birthDate);
+
+                await _context.SaveChangesAsync();
+
+            });
+        }
+
+
+        public async Task<AppResult> DeleteProfileAsync(string id)
+        {
+            return await ExecuteAsync(async () =>
+            {
+                var user = await _userManager.FindByIdAsync(id);
+
+                if(user is null)
+                    throw new AppException(404, "User Not Found.");
+                
+                await _userManager.DeleteAsync(user);
+            });
+        }
 
         // ===============================
         //   RESET PASSWORD
@@ -196,7 +230,7 @@ namespace ScoreZone.Infrastructure.Auth.Identity
 
                 var entityId = await GetEntityIdAsync(user.Id, roles.First());
 
-                var newToken = await _jwtProvider.CreateToken(user.Id, entityId, user.PhoneNumber!, roles);
+                var newToken = await _jwtProvider.CreateToken(user.Id, entityId, roles);
 
                 return newToken;
             });

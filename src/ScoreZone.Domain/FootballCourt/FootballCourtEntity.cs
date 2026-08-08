@@ -3,6 +3,7 @@ using ScoreZone.Domain.Reservation;
 using ScoreZone.Domain.Shared.Entities;
 using ScoreZone.Domain.Shared.Enum;
 using ScoreZone.Domain.Shared.Exceptions;
+using ScoreZone.Domain.User.Employee;
 using ScoreZone.Domain.User.Owner;
 
 namespace ScoreZone.Domain.FootballCourt
@@ -33,6 +34,7 @@ namespace ScoreZone.Domain.FootballCourt
         public List<ReservationEntity> Reservations { get; set; } = new();
         public FacilityEntity Facility { get; set; } = null!;
         public OwnerEntity Owner { get; set; } = null!;
+        public List<EmployeeEntity> Employees { get; set; } = new();
 
 
         private FootballCourtEntity(){} // For EF Core
