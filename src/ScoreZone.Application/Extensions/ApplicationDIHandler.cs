@@ -5,7 +5,9 @@ using ScoreZone.Application.Facility.Services;
 using ScoreZone.Application.FootballCourt.Interfaces;
 using ScoreZone.Application.Reservation.Interfaces;
 using ScoreZone.Application.Reservation.Services;
+using ScoreZone.Application.User.Employee.Interfaces;
 using ScoreZone.Application.User.Owner.Interfaces;
+using ScoreZone.Application.User.Player.Interfaces;
 
 namespace ScoreZone.Application.Extensions
 {
@@ -27,9 +29,13 @@ namespace ScoreZone.Application.Extensions
 
             services.AddScoped<IFootballCourtService, FootballCourtService>();
 
+            services.AddScoped<IReservationService, ReservationService>();
+
             services.AddScoped<IOwnerService, OwnerService>();
 
-            services.AddScoped<IReservationService, ReservationService>();
+            services.AddScoped<IPlayerService, PlayerService>();
+            
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
 
             return services;

@@ -23,7 +23,12 @@ namespace ScoreZone.Infrastructure.Repositories
 
         public async Task AddAsync(OwnerEntity court)
         {
-            await _context.AddAsync(court);
+            await _context.Owners.AddAsync(court);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            await _context.Owners.Where(x => x.Id == id).ExecuteDeleteAsync();
         }
 
         public async Task<(int count, IReadOnlyCollection<OwnerDetailsResponse> items)> GetAllAsync(int skip, int take)
@@ -57,6 +62,15 @@ namespace ScoreZone.Infrastructure.Repositories
                 .Include(x => x.Employees)
                 .Include(x => x.FootballCourts.Where(x => x.Status == CourtStatus.Active))
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<List<Guid>> MyFootballCourts(Guid ownerId)
+        {
+            return await _context.FootballCourts
+                .AsNoTracking()
+                .Where(x => x.OwnerId == ownerId)
+                .Select(x => x.Id)
+                .ToListAsync();
         }
     }
 }

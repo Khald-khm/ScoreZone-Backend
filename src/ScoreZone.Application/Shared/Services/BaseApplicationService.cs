@@ -135,5 +135,32 @@ namespace ScoreZone.Application.Shared.Services
                 throw;
             }
         }
+
+        protected async Task<AppResult> ExecuteAsync(Func<Task> businessLogic, int statusCode = 200)
+        {   
+            
+            try
+            {
+                await businessLogic();
+
+                return Result.Success(statusCode,"Success");
+
+            }
+
+            catch(DomainException ex)
+            {
+                return Result.DomainError(ex.StatusCode, ex.Message);
+            }
+
+            catch(AppException ex)
+            {
+                return Result.ApplicationError(ex.StatusCode, ex.Message);
+            }
+
+            catch(Exception)
+            {
+                throw;
+            }
+        }
     }
 }

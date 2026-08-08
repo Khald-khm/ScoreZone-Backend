@@ -1,7 +1,6 @@
 using ScoreZone.Application.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Net.Mime;
 
 namespace ScoreZone.API.Controllers
 {
@@ -15,7 +14,6 @@ namespace ScoreZone.API.Controllers
             _service = service;
         }
         
-
         
         [HttpPost("login")]
         [EndpointSummary("Login")]

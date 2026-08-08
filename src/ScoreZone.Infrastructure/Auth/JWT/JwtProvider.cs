@@ -19,14 +19,13 @@ namespace ScoreZone.Infrastructure.Auth.JWT
         }
         
 
-        public Task<string> CreateToken(string identityId, Guid userId, string phoneNumber, IList<string> roles)
+        public Task<string> CreateToken(string identityId, Guid userId, IList<string> roles)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("IdentityId", identityId),
-                new Claim("UserId", userId.ToString()),
-                new Claim(ClaimTypes.MobilePhone, phoneNumber)
+                new Claim("UserId", userId.ToString())
             };
 
             foreach(var role in roles)

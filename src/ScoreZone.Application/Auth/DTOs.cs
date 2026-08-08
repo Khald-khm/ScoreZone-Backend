@@ -21,13 +21,22 @@ namespace ScoreZone.Application.Auth
         string lastName,
         Gender gender,
         DateOnly birthDate,
-        // string username,
         string password,
         string phone,
         string? email,
         City city,
         string address,
         Roles role
+    );
+
+    public record UpdateProfileDTO(
+        string firstName,
+        string lastName,
+        Gender gender,
+        DateOnly birthDate,
+        string? email,
+        City city,
+        string address
     );
 
     public record RegisterResponseDTO(

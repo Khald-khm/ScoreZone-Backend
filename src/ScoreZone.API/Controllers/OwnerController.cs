@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScoreZone.Application.Shared.DTOs;
@@ -14,6 +15,31 @@ namespace ScoreZone.API.Controllers
         public OwnerController(IOwnerService service)
         {
             _service = service;
+        }
+
+        
+        [HttpPut("update")]
+        [Authorize(Roles = "Owner, Admin")]
+        [EndpointSummary("Update Profile")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Consumes(MediaTypeNames.Multipart.FormData)]
+        public async Task<IActionResult> Update([FromQuery] Guid? id, [FromForm] UpdateOwnerRequest request)
+        {
+            var result = await _service.UpdateAsync(id, request);
+
+            return HandleResult(result);
+        }
+        
+
+        [HttpPut("delete")]
+        [Authorize(Roles = "Owner, Admin")]
+        [EndpointSummary("Delete Profile")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Delete([FromQuery] Guid? id)
+        {
+            var result = await _service.DeleteAsync(id);
+
+            return HandleResult(result);
         }
 
 
@@ -42,12 +68,12 @@ namespace ScoreZone.API.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet("details")]
+        [Authorize(Roles = "Admin, Owner")]
         [EndpointSummary("Owner Details")]
         [EndpointDescription("Get Owner Details By Id")]
         [ProducesResponseType(typeof(OwnerDetailsResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromQuery] Guid? id)
         {
             var result = await _service.GetByIdAsync(id);
 

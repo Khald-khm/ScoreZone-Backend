@@ -8,7 +8,10 @@ using ScoreZone.Application.Shared.Helpers;
 using ScoreZone.Application.Shared.Interfaces;
 using ScoreZone.Application.Shared.Results;
 using ScoreZone.Application.Shared.Services;
+using ScoreZone.Application.User.Employee.Interfaces;
+using ScoreZone.Application.User.Owner.Interfaces;
 using ScoreZone.Domain.FootballCourt;
+using ScoreZone.Domain.Reservation.Enums;
 using ScoreZone.Domain.Shared.Enum;
 using ScoreZone.Domain.Shared.Exceptions;
 
@@ -19,11 +22,15 @@ namespace ScoreZone.Application.Reservation.Services
 
         private readonly IReservationRepository _repo;
         private readonly IFootballCourtRepository _courtRepo;
+        private readonly IOwnerRepository _ownerRepo;
+        private readonly IEmployeeRepository _employeeRepo;
 
         private readonly ICurrentUser _currentUser;
 
         public ReservationService(IReservationRepository repo, 
             IFootballCourtRepository courtRepo,
+            IOwnerRepository ownerRepo,
+            IEmployeeRepository employeeRepo,
             ICurrentUser currentUser,
             IServiceProvider serviceProvider, 
             ILogger<ReservationService> logger) 
@@ -31,26 +38,36 @@ namespace ScoreZone.Application.Reservation.Services
         {
             _repo = repo;
             _courtRepo = courtRepo;
+            _ownerRepo = ownerRepo;
+            _employeeRepo = employeeRepo;
             _currentUser = currentUser;
         }
 
-        public async Task<AppResult> AddAsync(AddUpdateReservationRequest request)
+        public async Task<AppResult> AddAsync(AddReservationRequest request)
         {
             return await ExecuteAsync(request, async () =>
             {
-                var reservation = request.ToEntity();
 
+                Guid? playerId = _currentUser.userId ?? request.playerId;
+
+                if(playerId is null)
+                    throw new AppException(404, "Player Id is Required.");
 
                 var court = await GetCourt(request.courtId);
 
+                if(court is null)
+                    throw new AppException(404, "Football Court Not Found.");
+
                 if(court!.Status != CourtStatus.Active)
                     throw new AppException(403, "Court is Not Active.");
-                    
 
                 var reservedSlots = await _repo.GetAllByDayAsync(request.courtId, request.reservationDate);
+
                 if(reservedSlots.Any(x => x.TimeSlotNum == request.timeSlotNum))
                     throw new AppException(403, "Time Slot Not Available.");
+                    
 
+                var reservation = request.ToEntity((Guid) playerId, court.PricePerMatch);
 
                 await _repo.AddAsync(reservation);
 
@@ -59,11 +76,14 @@ namespace ScoreZone.Application.Reservation.Services
         }
         
         
-        public async Task<AppResult> UpdateAsync(Guid id, AddUpdateReservationRequest request)
+        public async Task<AppResult> UpdateAsync(Guid id, UpdateReservationRequest request)
         {
             return await ExecuteAsync(request, async () =>
             {
                 var court = await GetCourt(request.courtId);
+
+                if(court is null)
+                    throw new AppException(404, "Football Court Not Found.");
 
                 if(court!.Status != CourtStatus.Active)
                     throw new AppException(403, "Court is Not Active.");
@@ -79,7 +99,7 @@ namespace ScoreZone.Application.Reservation.Services
                 if( reservation is null)
                     throw new AppException(404, "Reservation Not Found.");
 
-                reservation.Update(request.ToEntity());
+                reservation.Update(request.ToEntity(reservation.PlayerId, court.PricePerMatch));
 
                 await _repo.SaveChangesAsync();
             });
@@ -154,6 +174,66 @@ namespace ScoreZone.Application.Reservation.Services
                 reservation.PayDeposite(request.depositeAmount);
 
                 await _repo.SaveChangesAsync();
+            });
+        }
+
+
+
+        public async Task<AppResult> DailyReservationsAsync(DateOnly date)
+        {
+            return await ExecuteAsync(date, async () =>
+            {
+                List<Guid> courtIds;
+
+                if(!_currentUser.userId.HasValue)
+                    throw new AppException(404, "User Not Found.");
+                
+                var userId = _currentUser.userId.Value;
+
+                if(_currentUser.role == "Owner")
+                    courtIds = await _ownerRepo.MyFootballCourts(userId);
+                else
+                    courtIds = await _employeeRepo.MyFootballCourts(userId);
+
+                var reservations = await _repo.DailyReservations(date, courtIds);
+
+                // return reservations;
+            });
+        }
+
+
+        public async Task<AppResult> CheckInAsync(Guid reservationId, Guid playerId, int? completePayment)
+        {
+            return await ExecuteAsync(reservationId, async () =>
+            {
+                var reservation = await _repo.GetByIdAsync(reservationId);
+
+                if(reservation is null)
+                    throw new AppException(404, "Reservation Not Found.");
+
+                if(reservation.PlayerId != playerId)
+                    throw new AppException(409, "Reservation Does Not Belong To This Player.");
+                
+                if(reservation.Status != ReservationStatus.Paid || reservation.Status != ReservationStatus.Canceled)
+                {
+                    if(completePayment is null || completePayment <= 0)
+                        throw new AppException(403, "Payment Amount Must Be Greater Than 0.");
+
+                    reservation.CompletePayment((int)completePayment);
+                }
+                
+                reservation.CheckIn();
+                
+            });
+        }
+
+        public async Task<AppResult<IReadOnlyList<SearchReservationDetails>>> Search(string searchWord)
+        {
+            return await ExecuteAsync(searchWord, async () =>
+            {
+                string word = searchWord.Replace(" ", string.Empty);
+                
+                return await _repo.Search(word); 
             });
         }
 

@@ -4,8 +4,9 @@ using ScoreZone.Domain.Shared.Enum;
 namespace ScoreZone.Application.User.Player.DTOs
 {
     public record AddPlayerRequest(
-        string name, 
-        string? description, 
+        string identityId,
+        string firstName, 
+        string lastName, 
         string phoneNumber, 
         City city, 
         string address, 
@@ -14,5 +15,17 @@ namespace ScoreZone.Application.User.Player.DTOs
         decimal? locationLat, 
         decimal? locationLng, 
         FacilityStatus status
+    );
+
+    public record UpdatePlayerRequest(
+        string firstName, 
+        string lastName, 
+        City city, 
+        string address, 
+        IFormFile? profileImage, 
+        string? profileImageUrl, 
+        Gender gender,
+        DateOnly birthDate,
+        string? email
     );
 }

@@ -22,9 +22,9 @@ namespace ScoreZone.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddAsync(FacilityEntity court)
+        public async Task AddAsync(FacilityEntity facility)
         {
-            await _context.AddAsync(court);
+            await _context.Facilities.AddAsync(facility);
         }
 
         public async Task<(int count, IReadOnlyCollection<FacilityDetailsDto> items)> GetAllAsync(int skip, int take)
@@ -54,6 +54,7 @@ namespace ScoreZone.Infrastructure.Repositories
                     x.Id, x.Name
                 )).ToListAsync();
         }
+
 
         public async Task<FacilityEntity?> GetByIdAsync(Guid id)
         {

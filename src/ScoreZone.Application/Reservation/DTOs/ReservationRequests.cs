@@ -2,10 +2,17 @@ using ScoreZone.Domain.Reservation.Enums;
 
 namespace ScoreZone.Application.Reservation.DTOs
 {
-    public record AddUpdateReservationRequest(
-        Guid playerId, 
+    public record AddReservationRequest(
+        Guid? playerId, 
         Guid courtId, 
-        int timeSlotNum, 
+        int timeSlotNum,
+        ReservationStatus status,
+        DateOnly reservationDate
+    );
+    
+    public record UpdateReservationRequest(
+        Guid courtId, 
+        int timeSlotNum,
         ReservationStatus status,
         DateOnly reservationDate
     );

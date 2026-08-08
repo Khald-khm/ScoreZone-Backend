@@ -6,8 +6,9 @@ namespace ScoreZone.Application.User.Player.Mappings
     internal static class PlayerToEntity
     {
 
-        // public static PlayerEntity ToEntity(this AddPlayerRequest request)
-        // => new(request.name, request.description, request.phoneNumber, request.city, 
-        //     request.address, request.profileImageUrl, request.locationLat, request.locationLng, request.status);
+        public static PlayerEntity ToEntity(this AddPlayerRequest request)
+        => new(request.identityId, request.firstName, request.lastName, request.phoneNumber, request.city, 
+            request.address, request.profileImageUrl);
+
     }
 }
