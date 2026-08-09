@@ -32,17 +32,17 @@ app.UseDataBaseMigration();
 await app.UseSeedDataAsync();
 app.UseApplicationMiddleware();
 
-app.UseStaticFiles();
+// app.UseStaticFiles();
 
-var uploadsPath = Path.GetFullPath(
-    Path.Combine(Directory.GetCurrentDirectory(), "../Uploads")
-);
+// var uploadsPath = Path.GetFullPath(
+//     Path.Combine(Directory.GetCurrentDirectory(), "../Uploads")
+// );
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/Uploads"
-});
+// app.UseStaticFiles(new StaticFileOptions
+// {
+//     FileProvider = new PhysicalFileProvider(uploadsPath),
+//     RequestPath = "/Uploads"
+// });
 
 app.Run();
 
