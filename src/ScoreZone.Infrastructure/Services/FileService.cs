@@ -32,7 +32,7 @@ namespace ScoreZone.Infrastructure.Services
                 throw new DomainException(400, $"File Exceded Maximum Size Of {_maxFileSize / 1024}m.");
             
 
-            var extension = Path.GetExtension(file.FileName).ToLower();
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
             if(!_allowedExtensions.Contains(extension))
                 throw new  DomainException(400, $"File Extension {extension} is Not Allowed.");
@@ -43,7 +43,7 @@ namespace ScoreZone.Infrastructure.Services
             await using var stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);
 
-            return filePath;
+            return safeName;
             
         }
 

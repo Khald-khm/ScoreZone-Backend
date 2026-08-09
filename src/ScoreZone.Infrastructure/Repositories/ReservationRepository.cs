@@ -93,12 +93,12 @@ namespace ScoreZone.Infrastructure.Repositories
             var reservations = await _context.Reservations
                 .AsNoTracking()
                 .Where(x => courtIds.Contains(x.CourtId) && x.ReservationDate == date)
+                .OrderBy(x => x.TimeSlotNum)
                 .Select(res => new ReservationDetails(
                         res.Id, res.PlayerId, res.CourtId, res.FootballCourt.Name , 
                         res.FootballCourt.ProfileImage, res.FootballCourt.Type, res.FootballCourt.City, res.PricePerMatch, res.FootballCourt.Facility.Name, 
                         res.TimeSlotNum, res.Status, res.Deposite, 
                         res.Payment, res.ReservationDate, res.CheckedInAt))
-                .OrderBy(x => x.timeSlotNum)
                 .ToListAsync();
             
             return reservations;

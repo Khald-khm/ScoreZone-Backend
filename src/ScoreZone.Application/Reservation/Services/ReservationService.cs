@@ -72,7 +72,7 @@ namespace ScoreZone.Application.Reservation.Services
                 await _repo.AddAsync(reservation);
 
                 await _repo.SaveChangesAsync();
-            });
+            }, 201);
         }
         
         
@@ -179,7 +179,7 @@ namespace ScoreZone.Application.Reservation.Services
 
 
 
-        public async Task<AppResult> DailyReservationsAsync(DateOnly date)
+        public async Task<AppResult<IReadOnlyList<ReservationDetails>>> DailyReservationsAsync(DateOnly date)
         {
             return await ExecuteAsync(date, async () =>
             {
@@ -197,14 +197,14 @@ namespace ScoreZone.Application.Reservation.Services
 
                 var reservations = await _repo.DailyReservations(date, courtIds);
 
-                // return reservations;
+                return reservations;
             });
         }
 
 
         public async Task<AppResult> CheckInAsync(Guid reservationId, Guid playerId, int? completePayment)
         {
-            return await ExecuteAsync(reservationId, async () =>
+            return await ExecuteAsync(async () =>
             {
                 var reservation = await _repo.GetByIdAsync(reservationId);
 
@@ -223,6 +223,8 @@ namespace ScoreZone.Application.Reservation.Services
                 }
                 
                 reservation.CheckIn();
+
+                await _repo.SaveChangesAsync();
                 
             });
         }
@@ -234,6 +236,25 @@ namespace ScoreZone.Application.Reservation.Services
                 string word = searchWord.Replace(" ", string.Empty);
                 
                 return await _repo.Search(word); 
+            });
+        }
+
+        public async Task<AppResult> Cancel(Guid id)
+        {
+            return await ExecuteAsync(async () =>
+            {
+                var reservation = await _repo.GetByIdAsync(id);
+
+                if(reservation is null)
+                    throw new AppException(404, "Reservation Not Found.");
+
+                if(_currentUser.userId != reservation.PlayerId || _currentUser.role != "Owner")
+                    throw new AppException(403, "You Don't Have Access To This Resource.");
+                
+                reservation.Cancel();
+
+                await _repo.SaveChangesAsync();
+                
             });
         }
 

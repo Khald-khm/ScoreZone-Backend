@@ -107,9 +107,9 @@ namespace ScoreZone.API.Controllers
         [EndpointSummary("Player CheckIn")]
         [EndpointDescription("Employee Or Owner Let Player Check In To The Court.")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> CheckIn([FromRoute] Guid reservationId, [FromQuery] Guid playerId, [FromQuery] int? compeletePayment)
+        public async Task<IActionResult> CheckIn([FromRoute] Guid id, [FromQuery] Guid playerId, [FromQuery] int? compeletePayment)
         {
-            var result = await _service.CheckInAsync(reservationId, playerId, compeletePayment);
+            var result = await _service.CheckInAsync(id, playerId, compeletePayment);
 
             return HandleResult(result);
         }
@@ -123,6 +123,19 @@ namespace ScoreZone.API.Controllers
         public async Task<IActionResult> Search([FromRoute] string word)
         {
             var result = await _service.Search(word);
+
+            return HandleResult(result);
+        }
+        
+
+        [HttpGet("cancel/{id}")]
+        [Authorize(Roles = "Employee, Owner, Admin, Player")]
+        [EndpointSummary("Cancel Reservation")]
+        [EndpointDescription("Player, Employee, Owner & Admin Can Cancel Reservation.")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Cancel([FromRoute] Guid id)
+        {
+            var result = await _service.Cancel(id);
 
             return HandleResult(result);
         }

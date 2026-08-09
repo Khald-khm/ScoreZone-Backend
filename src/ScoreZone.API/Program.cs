@@ -1,5 +1,6 @@
 using ScoreZone.API.Extensions;
 using Scalar.AspNetCore;
+using Microsoft.Extensions.FileProviders;
 
 
 
@@ -30,6 +31,18 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 app.UseDataBaseMigration();
 await app.UseSeedDataAsync();
 app.UseApplicationMiddleware();
+
+app.UseStaticFiles();
+
+var uploadsPath = Path.GetFullPath(
+    Path.Combine(Directory.GetCurrentDirectory(), "../Uploads")
+);
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/Uploads"
+});
 
 app.Run();
 

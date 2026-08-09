@@ -18,11 +18,13 @@ namespace ScoreZone.Application.Reservation.Interfaces
 
         Task<AppResult> PayDepositeAsync(Guid id, PayDepositeRequest request);
 
-        Task<AppResult> DailyReservationsAsync(DateOnly date);
+        Task<AppResult<IReadOnlyList<ReservationDetails>>> DailyReservationsAsync(DateOnly date);
 
         Task<AppResult> CheckInAsync(Guid reservationId, Guid playerId, int? completePayment);
 
         Task<AppResult<IReadOnlyList<SearchReservationDetails>>> Search(string searchWord);
+
+        Task<AppResult> Cancel(Guid id);
         
     }
     
